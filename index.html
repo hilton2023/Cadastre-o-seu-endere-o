@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastre o seu endereço</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  input[type="submit"] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Cadastre o seu endereço</h1>
+  <form action="https://api.sheetmonkey.io/form/vfcJwh7atUCVgPbbnGZZme" method="post">
+    <label>
+      <span>Nome completo</span>
+      <input type="text" name ="name" required>
+    </label>
+    <label>
+      <span>E-mail</span>
+      <input type="email" name="email" required>
+    </label>
+    <label>
+      <span>Telefone</span>
+      <input type="tel" name="phone" required>
+    </label>
+    <label>
+      <span>CEP</span>
+      <input type="text" name="cep" id="cep" autocomplete="off" required>
+    </label>
+    <label>
+      <span>Rua</span>
+      <input type="text" name="street" id="street" required>
+    </label>
+    <label>
+      <span>Número</span>
+      <input type="text" name="number" required>
+    </label>
+    <label>
+      <span>Complemento</span>
+      <input type="text" name="complement">
+    </label>
+    <label>
+      <span>Bairro</span>
+      <input type="text" name="neighborhood" id="neighborhood" required>
+    </label>
+    <label>
+      <span>Cidade</span>
+      <input type="text" name="city" id="city" required>
+    </label>
+    <label>
+      <span>Estado</span>
+      <input type="text" name="state" id="state" required>
+    </label>
+    <input type="submit" value="Enviar">
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const cepInput = document.getElementById('cep');
+    cepInput.addEventListener('blur', function() {
+      const cep = cepInput.value.replace(/\D/g, '');
+      if (cep.length != 8) {
+        return;
+      }
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+          if (!data.erro) {
+            document.getElementById('street').value = data.logradouro;
+            document.getElementById('neighborhood').value = data.bairro;
+            document.getElementById('city').value = data.localidade;
+            document.getElementById('state').value = data.uf;
+          }
+        })
+        .catch(error => console.error('Erro ao buscar CEP:', error));
+    });
+  });
+</script>
+
+</body>
+</html>
